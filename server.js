@@ -10,6 +10,9 @@ async function connectToDB(){
     try{
         await mongoose.connect(process.env.MONGOURI)
         console.log('connected to db')
+        mongoose.set("debug", (collectionName, method, query, doc) => {
+            console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
+        });
     } catch(err){
         console.log('mongoose connection err: ', err)
     }
@@ -37,6 +40,6 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
-app.listen(7551, () => {
-    console.log('server is running on port 7551')
+app.listen(process.env.PORT, () => {
+    console.log('server is running on port ' + process.env.PORT)
 })
